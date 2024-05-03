@@ -21,6 +21,9 @@ public class AntAgent : MonoBehaviour, IWorldObject
     [SerializeField] protected float fov;
     [SerializeField] protected int nbRays;
     [SerializeField] protected float visionLength;
+    [SerializeField] protected float subraySideLength;
+    [SerializeField] protected int subraySideNb;
+    
 
     [SerializeField] protected float beginEnergy;
     [SerializeField] private TextMeshProUGUI txt;
@@ -66,6 +69,7 @@ public class AntAgent : MonoBehaviour, IWorldObject
         } else if (Input.GetKeyDown(KeyCode.Space))
         {
             GetVision();
+
         } else if (Input.GetKeyDown(KeyCode.S))
         {
             DrawVision();
@@ -112,40 +116,61 @@ public class AntAgent : MonoBehaviour, IWorldObject
  
     
     //-----OBSERVATION-----
-    float[] GetVision()
+    float[,,] GetVision()
     {
         float start_angle = -fov / 2f;
         float angle_step = fov / (float) (nbRays-1);
 
-        float[] visionData = new float[nbRays];
+        // visionData[0,0,0] : ray on the top left
+        // visionData[0,0,1] : ray on the top and second place from the left
+        float[,,] visionData = new float[nbRays, subraySideNb, subraySideNb];
         
-
         for (int i = 0; i < nbRays; i++)
         {
-            if (Physics.Raycast(sensorTr.position,
-                (Quaternion.Euler(0f, start_angle + angle_step * (float) i, 0f) * sensorTr.right) * visionLength,
-                out RaycastHit hit, visionLength))
+            //red axis
+            Vector3 forwardDirection = (Quaternion.Euler(0f, start_angle + angle_step * (float) i, 0f) * sensorTr.right).normalized;
+            
+            //blue axis
+            Vector3 leftDirection = (Quaternion.Euler(0f, start_angle + angle_step * (float) i, 0f) * sensorTr.forward).normalized;
+            Vector3 topDirection = sensorTr.up.normalized;
+
+            float between_rays = subraySideLength / (float) subraySideNb;
+
+            Vector3 first_point = sensorTr.position - ((subraySideLength / 2f) * leftDirection) -
+                                  ((subraySideLength / 2f) * topDirection);
+
+            for (int i_vert = 0; i_vert < subraySideNb; i_vert++)
             {
-                if (hit.transform.TryGetComponent(out IWorldObject obj))
+                for (int i_hor = 0; i_hor < subraySideNb; i_hor++)
                 {
-                    visionData[i] = obj.GetVisionValue();
-                    if (DEBUG)
+                    Vector3 currentRayStart = first_point + (i_vert * between_rays * leftDirection) +
+                                              (i_hor * between_rays * topDirection);
+
+                    if (Physics.Raycast(currentRayStart, forwardDirection, out RaycastHit hit, visionLength))
                     {
-                        Debug.DrawRay(
-                            sensorTr.position, 
-                            (Quaternion.Euler(0f, start_angle + angle_step* (float)i, 0f) * sensorTr.right) *visionLength,
-                            Color.magenta,
-                            2f
-                        );
-                    }
+                        if (hit.transform.TryGetComponent(out IWorldObject obj))
+                        {
+                            visionData[i, subraySideNb - i_vert - 1, subraySideNb - i_hor - 1] = obj.GetVisionValue();
+                            if (DEBUG)
+                            {
+                                Debug.DrawRay(
+                                    currentRayStart, 
+                                    forwardDirection * visionLength,
+                                    Color.magenta,
+                                    2f
+                                );
+                            }
                     
+                        }
+                    }
+                    else
+                    {
+                        visionData[i, subraySideNb - i_vert - 1, subraySideNb - i_hor - 1] = noHitValue;
+                    }
+
                 }
-                
             }
-            else
-            {
-                visionData[i] = noHitValue;
-            }
+            
         }
 
         return visionData;
