@@ -7,8 +7,10 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
-public class AntAgent : MonoBehaviour, IWorldObject
+
+public class AntAgent : Agent, IWorldObject
 {
     // Start is called before the first frame update
 
@@ -28,7 +30,9 @@ public class AntAgent : MonoBehaviour, IWorldObject
     [SerializeField] protected float beginEnergy;
     [SerializeField] private TextMeshProUGUI txt;
     [SerializeField] private GameObject canva;
-    
+
+    [SerializeField] private TerrainInstance terrainInstance;
+
     private float noHitValue = 0f;
     private float antValue = 1f;
 
@@ -55,7 +59,7 @@ public class AntAgent : MonoBehaviour, IWorldObject
 
         
     }
-    void Update()
+    /*void Update()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
@@ -77,7 +81,7 @@ public class AntAgent : MonoBehaviour, IWorldObject
 
         EatIfPossible();
 
-    }
+    }*/
     
     //-----MOVEMENT-----
     private bool Forward()
@@ -229,5 +233,29 @@ public class AntAgent : MonoBehaviour, IWorldObject
         }
         
     }
-    
+
+    public override void OnEpisodeBegin()
+    {
+        energy = beginEnergy;
+        // Reset the agent's position and rotation randomly within defined bounds
+        Vector3 randomPosition = GenerateRandomPosition();
+        Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
+        transform.position = randomPosition;
+        transform.rotation = randomRotation;
+
+        // Clear the terrain and regenerate it around the new agent's position and rotation
+        
+        terrainInstance.GenerateRandomTerrain(this);
+    }
+
+
+   private Vector3 GenerateRandomPosition()
+    {
+        float range = 15.0f;  // Example range, adjust as needed for your terrain size
+        return new Vector3(Random.Range(-range/2f, range/2f), 0, Random.Range(-range/2f, range/2f));
+    }
+
+
+
 }

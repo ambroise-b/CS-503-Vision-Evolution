@@ -22,19 +22,28 @@ public class TerrainInstance : MonoBehaviour
     private int maxIteration = 500;
     private float cellSize = 0.7f;
     
-    private void Awake()
+    /*private void Awake()
     {
         GenerateRandomTerrain();
-    }
+    } */
 
 
-    private void GenerateRandomTerrain()
+    public void GenerateRandomTerrain(AntAgent antAgent)
     {
         
         
         int nbCellSide = (int)Mathf.Floor(terrainSize / cellSize);
 
+
+
         bool[,] isFullGrid = new bool[nbCellSide, nbCellSide];
+
+        // Convert antPosition into cell coordinates
+        /*Vector3 localAntPos = transform.InverseTransformPoint(antPosition);
+        int antX = Mathf.Clamp((int)((localAntPos.x + terrainSize / 2) / cellSize), 0, nbCellSide - 1);
+        int antZ = Mathf.Clamp((int)((localAntPos.z + terrainSize / 2) / cellSize), 0, nbCellSide - 1);
+        isFullGrid[antX, antZ] = true;*/
+        
 
         int nbFood = Random.Range(foodBlockNbMin, foodBlockNbMax + 1);
         int nbObs = Random.Range(obstacleBlockNbMin, obstacleBlockNbMax + 1);
@@ -119,24 +128,23 @@ public class TerrainInstance : MonoBehaviour
 
 
         }
-        
         //placement : ant
-        int[,] agentPlacementCandidates = new int[(nbCellSide - 2)*(nbCellSide - 2),2];
+        int[,] agentPlacementCandidates = new int[(nbCellSide - 2) * (nbCellSide - 2), 2];
         int totalCandidates = 0;
-        
+
         for (int i0 = 1; i0 < nbCellSide - 1; i0++)
         {
             for (int i1 = 1; i1 < nbCellSide - 1; i1++)
             {
                 if (
-                    !isFullGrid[i0 -1, i1 -1] && !isFullGrid[i0 -1, i1] && !isFullGrid[i0 -1, i1 +1] &&
-                    !isFullGrid[i0, i1 -1] && !isFullGrid[i0, i1] && !isFullGrid[i0, i1 +1] &&
-                    !isFullGrid[i0 +1, i1 -1] && !isFullGrid[i0 +1, i1] && !isFullGrid[i0 +1, i1 +1]
+                    !isFullGrid[i0 - 1, i1 - 1] && !isFullGrid[i0 - 1, i1] && !isFullGrid[i0 - 1, i1 + 1] &&
+                    !isFullGrid[i0, i1 - 1] && !isFullGrid[i0, i1] && !isFullGrid[i0, i1 + 1] &&
+                    !isFullGrid[i0 + 1, i1 - 1] && !isFullGrid[i0 + 1, i1] && !isFullGrid[i0 + 1, i1 + 1]
                 )
                 {
                     agentPlacementCandidates[totalCandidates, 0] = i0;
                     agentPlacementCandidates[totalCandidates, 1] = i1;
-                    
+
                     totalCandidates++;
                 }
             }
@@ -148,10 +156,9 @@ public class TerrainInstance : MonoBehaviour
 
 
 
+        //instantiation : food
 
-            //instantiation : food
-        
-        
+
         //coord0 -> forward
         //coord1 -> right
         Vector3 startPoint = transform.position - ((terrainSize / 2f) * Vector3.forward) -
@@ -185,17 +192,25 @@ public class TerrainInstance : MonoBehaviour
                                   ((obsPlacement[i, 1] * cellSize) + cellSize/2) * Vector3.right;
 
             Instantiate(obstacleBlock, objPosition, quaternion.Euler(0f, objectAngle, 0f), transform);
+
+
         }
-        
+
         //instantiate ant
         float antAngle = Random.Range(0f, 90f);
-        
-        Vector3 antPosition = startPoint + ((agentPlacementCoords[0] * cellSize) + cellSize/2) * Vector3.forward +
-                              ((agentPlacementCoords[1] * cellSize) + cellSize/2) * Vector3.right + (0.01f * Vector3.up);
+
+        Vector3 antPosition = startPoint + ((agentPlacementCoords[0] * cellSize) + cellSize / 2) * Vector3.forward +
+                              ((agentPlacementCoords[1] * cellSize) + cellSize / 2) * Vector3.right + (0.01f * Vector3.up);
 
 
-        Instantiate(antAgent, antPosition, quaternion.Euler(0f, antAngle, 0f), null);
+        //Instantiate(antAgent, antPosition, quaternion.Euler(0f, antAngle, 0f), null);
+
+        antAgent.transform.position = antPosition;
+        antAgent.transform.rotation = quaternion.Euler(0f, antAngle, 0f);
 
 
     }
+
+
+
 }
