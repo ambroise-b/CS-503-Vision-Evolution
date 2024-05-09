@@ -5,7 +5,7 @@ using UnityEngine;
 public class FoodObj : MonoBehaviour, IWorldObject
 {
     private float foodValue = 2f;
-    [SerializeField] protected float energy = 4f;
+    [SerializeField] protected float energy = 40f;
         
 
     public float GetVisionValue()
@@ -20,6 +20,7 @@ public class FoodObj : MonoBehaviour, IWorldObject
 
     public void EatFood()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

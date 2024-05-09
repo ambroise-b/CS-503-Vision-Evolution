@@ -6,7 +6,6 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -35,17 +34,29 @@ public class AntAgent : Agent, IWorldObject
 
     private float noHitValue = 0f;
     private float antValue = 1f;
-
+    private float stepEnergyCost = 0.1f;
+    
+    
     private BoxCollider bc;
     private float energy;
+    private int foodGathered;
 
-    private bool DEBUG = true;
+    [SerializeField]private bool DEBUG = true;
+
+    private float[,] viewFilter;
+    private float normalizeFactor;
 
 
     private void Start()
     {
         bc = GetComponent<BoxCollider>();
-        energy = beginEnergy;
+
+        viewFilter = CreateGaussianArray(subraySideNb, 1f, 1f);
+
+        //3f is the max value of GetVisionValue among
+        normalizeFactor = 1/( viewFilter[subraySideNb / 2, subraySideNb / 2] * 3f); 
+        
+        
 
         if (DEBUG)
         {
@@ -57,32 +68,8 @@ public class AntAgent : Agent, IWorldObject
             canva.SetActive(false);
         }
 
-        
     }
-    /*void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Forward();
-        } else if (Input.GetKeyDown(KeyCode.A))
-        {
-            TurnLeft();
-        } else if (Input.GetKeyDown(KeyCode.D))
-        {
-            TurnRight();
-        } else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GetVision();
 
-        } else if (Input.GetKeyDown(KeyCode.S))
-        {
-            DrawVision();
-        }
-
-        EatIfPossible();
-
-    }*/
-    
     //-----MOVEMENT-----
     private bool Forward()
     {
@@ -120,7 +107,7 @@ public class AntAgent : Agent, IWorldObject
  
     
     //-----OBSERVATION-----
-    float[,,] GetVision()
+    private float[,,] GetSubVision()
     {
         float start_angle = -fov / 2f;
         float angle_step = fov / (float) (nbRays-1);
@@ -179,6 +166,96 @@ public class AntAgent : Agent, IWorldObject
 
         return visionData;
     }
+
+
+    private float[] GetVision()
+    {
+        float[,,] subVision = GetSubVision();
+        float nbElts = subraySideNb * subraySideNb;
+
+        float[] ret = new float[nbRays];
+        
+        
+        //Debug.Log(subVision.Length/(subVision.GetLength(0)*viewFilter.Length));
+
+        for (int k = 0; k < subVision.GetLength(0); k++)
+        {
+            float totalK = 0f;
+            
+            for (int i = 0; i < subVision.GetLength(1); i++)
+            {
+                for (int j = 0; j < subVision.GetLength(2); j++)
+                {
+                    totalK += subVision[k, i, j] * viewFilter[i, j];
+                }
+            }
+
+            totalK = (totalK/nbElts) * normalizeFactor;
+            ret[k] = totalK;
+        }
+
+        return ret;
+    }
+    
+    public override void CollectObservations(VectorSensor sensor)
+    {
+
+        float[] visionData = GetVision();
+        // Target and Agent positions
+        //sensor.AddObservation(Target.localPosition);
+        for (int i = 0; i < nbRays; i++)
+        {
+            sensor.AddObservation(visionData[i]);
+        }
+        
+        sensor.AddObservation(energy);
+        
+    }
+
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        int movement = actionBuffers.DiscreteActions[0];
+
+        if (movement == 0)
+        {
+            Forward();
+        } else if (movement == 1)
+        {
+            TurnLeft();
+        } else if (movement == 2)
+        {
+            TurnRight();
+        }
+
+        float addEnergy = EatIfPossible();
+
+        if (addEnergy > 0f)
+        {
+            SetReward(10f);
+        }
+
+        energy -= stepEnergyCost;
+
+        if (energy <= 0f)
+        {
+            SetReward(-50f);
+            EndEpisode();
+        }
+        else
+        {
+            SetReward(-0.1f);
+        }
+        
+        //check if is there is still some food
+
+        if (foodGathered >= terrainInstance.GetTotalFood())
+        {
+            EndEpisode();
+        }
+
+    }
+    
+    
     
     public float GetVisionValue()
     {
@@ -200,6 +277,9 @@ public class AntAgent : Agent, IWorldObject
                 energy += food.GetEnergy();
                 totalEnergy += food.GetEnergy();
                 food.EatFood();
+                foodGathered += 1;
+                
+                break;
             }
         }
 
@@ -209,6 +289,22 @@ public class AntAgent : Agent, IWorldObject
         }
         
         return totalEnergy;
+    }
+    
+    
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        var discreteActionsOut = actionsOut.DiscreteActions;
+        if (Input.GetKey(KeyCode.W))
+        {
+            discreteActionsOut[0] = 0;
+        } else if (Input.GetKey(KeyCode.D))
+        {
+            discreteActionsOut[0] = 1;
+        } else if (Input.GetKey(KeyCode.A))
+        {
+            discreteActionsOut[0] = 2;
+        }
     }
     
     
@@ -237,23 +333,30 @@ public class AntAgent : Agent, IWorldObject
     public override void OnEpisodeBegin()
     {
         energy = beginEnergy;
-        // Reset the agent's position and rotation randomly within defined bounds
-        Vector3 randomPosition = GenerateRandomPosition();
-        Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-
-        transform.position = randomPosition;
-        transform.rotation = randomRotation;
-
-        // Clear the terrain and regenerate it around the new agent's position and rotation
+        foodGathered = 0;
         
         terrainInstance.GenerateRandomTerrain(this);
     }
 
-
-   private Vector3 GenerateRandomPosition()
+    
+    private static float[,] CreateGaussianArray(int size, float sigma, float spacing)
     {
-        float range = 15.0f;  // Example range, adjust as needed for your terrain size
-        return new Vector3(Random.Range(-range/2f, range/2f), 0, Random.Range(-range/2f, range/2f));
+        float[,] grid = new float[size, size];
+        int center = size / 2;
+        float mu = 0f;  // Center of the peak
+        float normalization = 1f / (2f * Mathf.PI * sigma * sigma);
+        
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                float x = (i - center) * spacing;
+                float y = (j - center) * spacing;
+                grid[i, j] = Mathf.Abs(normalization * Mathf.Exp(-((x - mu) * (x - mu) + (y - mu) * (y - mu)) / (2 * sigma * sigma)));
+            }
+        }
+        
+        return grid;
     }
 
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class TerrainInstance : MonoBehaviour
@@ -22,10 +23,18 @@ public class TerrainInstance : MonoBehaviour
     private int maxIteration = 500;
     private float cellSize = 0.7f;
     
-    /*private void Awake()
+
+    private GameObject[] obstacleCreated;
+    private GameObject[] foodCreated;
+
+    private int totalFood;
+
+    protected void Awake()
     {
-        GenerateRandomTerrain();
-    } */
+        obstacleCreated = new GameObject[obstacleBlockNbMax];
+        foodCreated = new GameObject[foodBlockNbMax];
+
+    }
 
 
     public void GenerateRandomTerrain(AntAgent antAgent)
@@ -37,21 +46,25 @@ public class TerrainInstance : MonoBehaviour
 
 
         bool[,] isFullGrid = new bool[nbCellSide, nbCellSide];
-
-        // Convert antPosition into cell coordinates
-        /*Vector3 localAntPos = transform.InverseTransformPoint(antPosition);
-        int antX = Mathf.Clamp((int)((localAntPos.x + terrainSize / 2) / cellSize), 0, nbCellSide - 1);
-        int antZ = Mathf.Clamp((int)((localAntPos.z + terrainSize / 2) / cellSize), 0, nbCellSide - 1);
-        isFullGrid[antX, antZ] = true;*/
+        
+        Vector3 startPoint = transform.position - ((terrainSize / 2f) * Vector3.forward) -
+                             ((terrainSize / 2f) * Vector3.right);
         
 
         int nbFood = Random.Range(foodBlockNbMin, foodBlockNbMax + 1);
         int nbObs = Random.Range(obstacleBlockNbMin, obstacleBlockNbMax + 1);
+
+        totalFood = nbFood;
+
+        //we use this function to do pooling instead recrating each object at the end of each episode
+        AdjustObjectsNumber(nbObs, nbFood, startPoint);
         
-        /*Debug.Log("Nb food " + nbFood);
-        Debug.Log("Nb obs" + nbObs);*/
         
-        
+        /*Debug.Log("nbFood = " + nbFood );
+        Debug.Log("foodCreated = " + foodCreated.Count);
+        Debug.Log("nbObs = " + nbObs);
+        Debug.Log("obsCreated = " + obstacleCreated.Count);*/
+
         //placement : food and obstacle
         int[,] foodPlacement = new int[nbFood, 2];
         int[,] obsPlacement = new int[nbObs, 2];
@@ -161,8 +174,7 @@ public class TerrainInstance : MonoBehaviour
 
         //coord0 -> forward
         //coord1 -> right
-        Vector3 startPoint = transform.position - ((terrainSize / 2f) * Vector3.forward) -
-                             ((terrainSize / 2f) * Vector3.right);
+        
 
         float foodSize = foodBlock.transform.localScale.x;
 
@@ -176,8 +188,12 @@ public class TerrainInstance : MonoBehaviour
             Vector3 objPosition = foodStartPoint + ((foodPlacement[i, 0] * cellSize) + cellSize/2) * Vector3.forward +
                                   ((foodPlacement[i, 1] * cellSize) + cellSize/2) * Vector3.right;
 
-            Instantiate(foodBlock, objPosition, quaternion.Euler(0f, objectAngle, 0f), transform);
-            
+            //Instantiate(foodBlock, objPosition, quaternion.Euler(0f, objectAngle, 0f), transform);
+
+            foodCreated[i].transform.position = objPosition;
+            foodCreated[i].transform.rotation = quaternion.Euler(0f, objectAngle, 0f);
+
+
         }
 
         //instantiation : obstacle    
@@ -191,10 +207,15 @@ public class TerrainInstance : MonoBehaviour
             Vector3 objPosition = obsStartPoint + ((obsPlacement[i, 0] * cellSize) + cellSize/2) * Vector3.forward +
                                   ((obsPlacement[i, 1] * cellSize) + cellSize/2) * Vector3.right;
 
-            Instantiate(obstacleBlock, objPosition, quaternion.Euler(0f, objectAngle, 0f), transform);
+            //Instantiate(obstacleBlock, objPosition, quaternion.Euler(0f, objectAngle, 0f), transform);
+
+            obstacleCreated[i].transform.position = objPosition;
+            obstacleCreated[i].transform.rotation = quaternion.Euler(0f, objectAngle, 0f);
 
 
         }
+        
+        //AdjustObjectsNumber(nbObsPlaced, nbFoodPlaced, startPoint);
 
         //instantiate ant
         float antAngle = Random.Range(0f, 90f);
@@ -207,8 +228,139 @@ public class TerrainInstance : MonoBehaviour
 
         antAgent.transform.position = antPosition;
         antAgent.transform.rotation = quaternion.Euler(0f, antAngle, 0f);
+        
 
 
+    }
+
+    private void AdjustObjectsNumber(int nbObs, int nbFood, Vector3 startPoint)
+    {
+        if (obstacleCreated[0] == null)
+        {
+            Debug.Log("first iteration");
+            
+            for (int i = 0; i < obstacleCreated.Length; i++)
+            {
+                GameObject goCreated = Instantiate(obstacleBlock, startPoint, quaternion.identity, transform);
+                obstacleCreated[i] = goCreated;
+            }
+            
+            for (int i = 0; i < foodCreated.Length; i++)
+            {
+                GameObject goCreated = Instantiate(foodBlock, startPoint, quaternion.identity, transform);
+                foodCreated[i] = goCreated;
+            }
+        }
+        
+        
+        Debug.Log("nbFood = " + nbFood);
+        Debug.Log("nbObs = " + nbObs);
+
+
+        for (int i = 0; i < nbObs; i++)
+        {
+            obstacleCreated[i].SetActive(true);
+        }
+
+        for (int i = nbObs; i < obstacleCreated.Length; i++)
+        {
+            obstacleCreated[i].SetActive(false);
+        }
+        
+        for (int i = 0; i < nbFood; i++)
+        {
+            foodCreated[i].SetActive(true);
+            
+        }
+
+        for (int i = nbFood; i < foodCreated.Length; i++)
+        {
+            foodCreated[i].SetActive(false);
+        }
+        
+
+        /*if (obstacleCreated.Count == nbObs && foodCreated.Count == nbFood)
+        {
+            return;
+        }
+        
+        int nbObsToInst = 0;
+        int nbObsToDestroy = 0;
+        int nbFoodToInst = 0;
+        int nbFoodToDestroy = 0;
+        
+
+        if (obstacleCreated.Count >= nbObs)
+        {
+            //need to destroy obstacles
+            nbObsToDestroy = obstacleCreated.Count - nbObs;
+        }
+        else
+        {
+            //need to instantiate obstacles
+            nbObsToInst = nbObs - obstacleCreated.Count;
+        }
+        
+        if (foodCreated.Count >= nbFood)
+        {
+            //need to destroy food
+            nbFoodToDestroy = foodCreated.Count - nbFood;
+        }
+        else
+        {
+            //need to instantiate food
+            nbFoodToInst = nbFood - foodCreated.Count;
+        }
+
+
+        if (nbObsToDestroy > 0)
+        {
+            for (int i = 0; i < nbObsToDestroy; i++)
+            {
+                GameObject goToDestroy = obstacleCreated[obstacleCreated.Count - 1];
+                obstacleCreated.RemoveAt(obstacleCreated.Count - 1);
+                Destroy(goToDestroy);
+
+            }
+        }
+        
+        if (nbFoodToDestroy > 0)
+        {
+            for (int i = 0; i < nbFoodToDestroy; i++)
+            {
+                GameObject goToDestroy = foodCreated[foodCreated.Count - 1];
+                foodCreated.RemoveAt(foodCreated.Count - 1);
+                Destroy(goToDestroy);
+
+            }
+        }
+
+        if (nbObsToInst > 0)
+        {
+
+            for (int i = 0; i < nbObsToInst; i++)
+            {
+                GameObject goCreated = Instantiate(obstacleBlock, startPoint, quaternion.identity, transform);
+                obstacleCreated.Add(goCreated);
+            }
+            
+        }
+        
+        if (nbFoodToInst > 0)
+        {
+            for (int i = 0; i < nbFoodToInst; i++)
+            {
+                GameObject goCreated = Instantiate(foodBlock, startPoint, quaternion.identity, transform);
+                foodCreated.Add(goCreated);
+            }
+
+        }*/
+    }
+    
+
+    public int GetTotalFood()
+    {
+        return totalFood;
     }
 
 
