@@ -45,6 +45,7 @@ public class AntAgent : Agent, IWorldObject
 
     private float[,] viewFilter;
     private float normalizeFactor;
+    private float energyNormalized = 0.1f;
 
 
     private void Start()
@@ -208,7 +209,7 @@ public class AntAgent : Agent, IWorldObject
             sensor.AddObservation(visionData[i]);
         }
         
-        sensor.AddObservation(energy);
+        sensor.AddObservation(energy * energyNormalized);
         
     }
 
