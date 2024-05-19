@@ -5,4 +5,7 @@ using UnityEngine;
 public interface IWorldObject
 {
     public float GetVisionValue();
+
+
+    public Vector3 GetVisionValueRGB();
 }

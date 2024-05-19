@@ -34,6 +34,9 @@ public class AntAgent : Agent, IWorldObject
 
     private float noHitValue = 0f;
     private float antValue = 1f;
+    private Vector3 noHitValueRGB = new Vector3(0f, 0f, 0f);
+    private Vector3 antValueRGB = new Vector3(255f / 255f, 255f / 255f, 255f / 255f);
+    
     private float stepEnergyCost = 0.1f;
     
     
@@ -116,7 +119,7 @@ public class AntAgent : Agent, IWorldObject
         // visionData[0,0,0] : ray on the top left
         // visionData[0,0,1] : ray on the top and second place from the left
         float[,,] visionData = new float[nbRays, subraySideNb, subraySideNb];
-        
+
         for (int i = 0; i < nbRays; i++)
         {
             //red axis
@@ -143,6 +146,7 @@ public class AntAgent : Agent, IWorldObject
                         if (hit.transform.TryGetComponent(out IWorldObject obj))
                         {
                             visionData[i, subraySideNb - i_vert - 1, subraySideNb - i_hor - 1] = obj.GetVisionValue();
+                            
                             if (DEBUG)
                             {
                                 Debug.DrawRay(
@@ -167,6 +171,72 @@ public class AntAgent : Agent, IWorldObject
 
         return visionData;
     }
+    
+    
+    private Vector3[,,] GetSubVisionRGB()
+    {
+        float start_angle = -fov / 2f;
+        float angle_step = fov / (float) (nbRays-1);
+
+        // visionData[0,0,0] : ray on the top left
+        // visionData[0,0,1] : ray on the top and second place from the left
+        Vector3[,,] visionData = new Vector3[nbRays, subraySideNb, subraySideNb];
+
+        for (int i = 0; i < nbRays; i++)
+        {
+            //red axis
+            Vector3 forwardDirection = (Quaternion.Euler(0f, start_angle + angle_step * (float) i, 0f) * sensorTr.right).normalized;
+            
+            //blue axis
+            Vector3 leftDirection = (Quaternion.Euler(0f, start_angle + angle_step * (float) i, 0f) * sensorTr.forward).normalized;
+            Vector3 topDirection = sensorTr.up.normalized;
+
+            float between_rays = subraySideLength / (float) subraySideNb;
+
+            Vector3 first_point = sensorTr.position - ((subraySideLength / 2f) * leftDirection) -
+                                  ((subraySideLength / 2f) * topDirection);
+
+            for (int i_vert = 0; i_vert < subraySideNb; i_vert++)
+            {
+                for (int i_hor = 0; i_hor < subraySideNb; i_hor++)
+                {
+                    Vector3 currentRayStart = first_point + (i_vert * between_rays * leftDirection) +
+                                              (i_hor * between_rays * topDirection);
+
+                    if (Physics.Raycast(currentRayStart, forwardDirection, out RaycastHit hit, visionLength))
+                    {
+                        if (hit.transform.TryGetComponent(out IWorldObject obj))
+                        {
+                            visionData[i, subraySideNb - i_vert - 1, subraySideNb - i_hor - 1] = obj.GetVisionValueRGB();
+                            
+                            if (DEBUG)
+                            {
+                                Debug.DrawRay(
+                                    currentRayStart, 
+                                    forwardDirection * visionLength,
+                                    Color.magenta,
+                                    2f
+                                );
+                            }
+                    
+                        }
+                    }
+                    else
+                    {
+                        visionData[i, subraySideNb - i_vert - 1, subraySideNb - i_hor - 1] = noHitValueRGB;
+                    }
+
+                }
+            }
+            
+        }
+
+        return visionData;
+    }
+    
+    
+    
+    
 
 
     private float[] GetVision()
@@ -176,9 +246,6 @@ public class AntAgent : Agent, IWorldObject
 
         float[] ret = new float[nbRays];
         
-        
-        //Debug.Log(subVision.Length/(subVision.GetLength(0)*viewFilter.Length));
-
         for (int k = 0; k < subVision.GetLength(0); k++)
         {
             float totalK = 0f;
@@ -199,17 +266,61 @@ public class AntAgent : Agent, IWorldObject
         return ret;
     }
     
+    private Vector3[] GetVisionRGB()
+    {
+        Vector3[,,] subVision = GetSubVisionRGB();
+        float nbElts = subraySideNb * subraySideNb;
+
+        Vector3[] ret = new Vector3[nbRays];
+        
+        for (int k = 0; k < subVision.GetLength(0); k++)
+        {
+            Vector3 totalK = subVision[k, subraySideNb/2, subraySideNb/2];
+            ret[k] = totalK;
+
+            //simplified version with no subray system actually used
+
+
+
+            /*for (int i = 0; i < subVision.GetLength(1); i++)
+            {
+                for (int j = 0; j < subVision.GetLength(2); j++)
+                {
+                    totalK += subVision[k, i, j] * viewFilter[i, j];
+                }
+            }
+
+            //totalK = (totalK/nbElts) * normalizeFactor;
+            totalK = totalK * normalizeFactor;
+            ret[k] = totalK;*/
+        }
+
+        return ret;
+    }
+    
+    
     public override void CollectObservations(VectorSensor sensor)
     {
 
-        float[] visionData = GetVision();
-        // Target and Agent positions
-        //sensor.AddObservation(Target.localPosition);
+        
+        //non-RGB
+        //float[] visionData = GetVision();
+        
+        //RGB
+        Vector3[] visionData = GetVisionRGB();
+        
+        
         for (int i = 0; i < nbRays; i++)
         {
+            
+            //non-RGB
+            //sensor.AddObservation(visionData[i]);
+            
+            //RGB
             sensor.AddObservation(visionData[i]);
+            
         }
-        
+
         sensor.AddObservation(energy * energyNormalized);
         
     }
@@ -233,19 +344,19 @@ public class AntAgent : Agent, IWorldObject
 
         if (addEnergy > 0f)
         {
-            SetReward(10f);
+            SetReward(1f);
         }
 
         energy -= stepEnergyCost;
 
         if (energy <= 0f)
         {
-            SetReward(-50f);
+            SetReward(-1f);
             EndEpisode();
         }
         else
         {
-            SetReward(-0.1f);
+            SetReward(-0.005f);
         }
         
         //check if is there is still some food
@@ -263,8 +374,13 @@ public class AntAgent : Agent, IWorldObject
     {
         return antValue;
     }
-    
-    
+
+    public Vector3 GetVisionValueRGB()
+    {
+        return antValueRGB;
+    }
+
+
     //-----EAT-----
     public float EatIfPossible()
     {
