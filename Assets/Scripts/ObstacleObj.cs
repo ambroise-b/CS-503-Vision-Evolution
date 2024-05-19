@@ -5,8 +5,7 @@ using UnityEngine;
 public class ObstacleObj : MonoBehaviour, IWorldObject
 {
 
-    private float obstacleValue = 3f;
-
+    [SerializeField] protected float obstacleValue;
 
     public float GetVisionValue()
     {

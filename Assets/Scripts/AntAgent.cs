@@ -55,7 +55,7 @@ public class AntAgent : Agent, IWorldObject
         viewFilter = CreateGaussianArray(subraySideNb, 1f, 1f);
 
         //3f is the max value of GetVisionValue among
-        normalizeFactor = 1/( viewFilter[subraySideNb / 2, subraySideNb / 2] * 3f); 
+        normalizeFactor = 1/( viewFilter[subraySideNb / 2, subraySideNb / 2] * 4f); 
         
         
 
@@ -191,7 +191,8 @@ public class AntAgent : Agent, IWorldObject
                 }
             }
 
-            totalK = (totalK/nbElts) * normalizeFactor;
+            //totalK = (totalK/nbElts) * normalizeFactor;
+            totalK = totalK * normalizeFactor;
             ret[k] = totalK;
         }
 
@@ -353,9 +354,11 @@ public class AntAgent : Agent, IWorldObject
             {
                 float x = (i - center) * spacing;
                 float y = (j - center) * spacing;
-                grid[i, j] = Mathf.Abs(normalization * Mathf.Exp(-((x - mu) * (x - mu) + (y - mu) * (y - mu)) / (2 * sigma * sigma)));
+                grid[i, j] = 0f;
+                //grid[i, j] = Mathf.Abs(normalization * Mathf.Exp(-((x - mu) * (x - mu) + (y - mu) * (y - mu)) / (2 * sigma * sigma)));
             }
         }
+        grid[center, center] = 1f;
         
         return grid;
     }
