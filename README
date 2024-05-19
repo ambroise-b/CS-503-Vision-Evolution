@@ -1,0 +1,6 @@
+# CS-503 Project, Adapting Perception configuration to Environments
+
+
+## How to change vision 
+--env-args ...        Arguments passed to the Unity executable. Be aware that the standalone build will also process these as Unity Command Line Arguments. You should choose different argument names if you want to create environment-specific arguments. All arguments
+                        after this flag will be passed to the executable. (default: None)
