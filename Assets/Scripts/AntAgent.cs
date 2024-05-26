@@ -19,8 +19,8 @@ public class AntAgent : Agent, IWorldObject
     [SerializeField] protected Transform sensorTr;
 
 
-    [SerializeField] protected float fov;
-    [SerializeField] protected int nbRays;
+    [SerializeField] protected float fov = 60f;  // Default value
+    [SerializeField] protected int nbRays = 8;  // Default value
     [SerializeField] protected float visionLength;
     [SerializeField] protected float subraySideLength;
     [SerializeField] protected int subraySideNb;
@@ -49,10 +49,29 @@ public class AntAgent : Agent, IWorldObject
     private float[,] viewFilter;
     private float normalizeFactor;
     private float energyNormalized = 0.1f;
+    private int maxNbRays = 21; // Number of vision elements to send to the agent
+
 
 
     private void Start()
     {
+
+        // Retrieve command line arguments
+        string fovArg = GetArg("--fov");
+        string nbRaysArg = GetArg("--nbRays");
+
+        if (fovArg != null)
+        {
+            fov = float.Parse(fovArg);
+        }
+
+        if (nbRaysArg != null)
+        {
+            nbRays = int.Parse(nbRaysArg);
+        }
+
+        Debug.LogWarning("field of view = " + fovArg);
+        Debug.LogWarning("number of rays = " +nbRays);
         bc = GetComponent<BoxCollider>();
 
         viewFilter = CreateGaussianArray(subraySideNb, 1f, 1f);
@@ -301,28 +320,33 @@ public class AntAgent : Agent, IWorldObject
     
     public override void CollectObservations(VectorSensor sensor)
     {
-
         
-        //non-RGB
-        //float[] visionData = GetVision();
-        
-        //RGB
+        // Fetch the vision data
         Vector3[] visionData = GetVisionRGB();
         
+        Vector3[] extendedVisionData = new Vector3[maxNbRays];
         
-        for (int i = 0; i < nbRays; i++)
+        // Check if the length of vision data is less than n and fill with zeros if needed
+        if (visionData.Length < maxNbRays)
         {
-            
-            //non-RGB
-            //sensor.AddObservation(visionData[i]);
-            
-            //RGB
-            sensor.AddObservation(visionData[i]);
-            
+            for (int i = 0; i < visionData.Length; i++)
+            {
+                extendedVisionData[i] = visionData[i];
+            }
+            for (int i = visionData.Length; i < maxNbRays; i++)
+            {
+                extendedVisionData[i] = Vector3.zero;
+            }
+        }
+        
+        // Add each element of vision data to the sensor
+        for (int i = 0; i < maxNbRays; i++)
+        {
+            sensor.AddObservation(extendedVisionData[i]);
         }
 
+        // Add the other observation
         sensor.AddObservation(energy * energyNormalized);
-        
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -332,10 +356,12 @@ public class AntAgent : Agent, IWorldObject
         if (movement == 0)
         {
             Forward();
-        } else if (movement == 1)
+        }
+        else if (movement == 1)
         {
             TurnLeft();
-        } else if (movement == 2)
+        }
+        else if (movement == 2)
         {
             TurnRight();
         }
@@ -347,7 +373,9 @@ public class AntAgent : Agent, IWorldObject
             SetReward(1f);
         }
 
-        energy -= stepEnergyCost;
+        // Adjust energy loss based on the number of rays
+        float energyLossFactor = nbRays / 10.0f; // Example factor, you can adjust as needed
+        energy -= stepEnergyCost * energyLossFactor;
 
         if (energy <= 0f)
         {
@@ -358,17 +386,14 @@ public class AntAgent : Agent, IWorldObject
         {
             SetReward(-0.005f);
         }
-        
-        //check if is there is still some food
 
+        // Check if there is still some food
         if (foodGathered >= terrainInstance.GetTotalFood())
         {
             EndEpisode();
         }
-
     }
-    
-    
+
     
     public float GetVisionValue()
     {
@@ -477,6 +502,19 @@ public class AntAgent : Agent, IWorldObject
         grid[center, center] = 1f;
         
         return grid;
+    }
+
+    private static string GetArg(string name)
+    {
+        var args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == name && args.Length > i + 1)
+            {
+                return args[i + 1];
+            }
+        }
+        return null;
     }
 
 
