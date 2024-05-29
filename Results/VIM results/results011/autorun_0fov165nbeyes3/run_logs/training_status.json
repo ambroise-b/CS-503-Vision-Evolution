@@ -1,0 +1,29 @@
+{
+    "Ant": {
+        "checkpoints": [
+            {
+                "steps": 250107,
+                "file_path": "results/autorun_0fov165nbeyes3/Ant/Ant-250107.onnx",
+                "reward": -15.579998344182968,
+                "creation_time": 1716969710.941824,
+                "auxillary_file_paths": [
+                    "results/autorun_0fov165nbeyes3/Ant/Ant-250107.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 250107,
+            "file_path": "results/autorun_0fov165nbeyes3/Ant.onnx",
+            "reward": -15.579998344182968,
+            "creation_time": 1716969710.941824,
+            "auxillary_file_paths": [
+                "results/autorun_0fov165nbeyes3/Ant/Ant-250107.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.0.0",
+        "torch_version": "2.2.2"
+    }
+}

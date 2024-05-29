@@ -1,0 +1,622 @@
+{
+    "1": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -63.499992817640305,
+            "ep_lenght_mean": 12500.0
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -63.494992822408676,
+            "ep_lenght_mean": 12499.0
+        }
+    },
+    "3": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -13.496665254235268,
+            "ep_lenght_mean": 2499.3333333333335
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -10.401427490370613,
+            "ep_lenght_mean": 1880.2857142857142
+        }
+    },
+    "5": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -7.285713625805719,
+            "ep_lenght_mean": 1257.142857142857
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -6.749999389052391,
+            "ep_lenght_mean": 1150.0
+        }
+    },
+    "7": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -7.003635655749928,
+            "ep_lenght_mean": 1200.7272727272727
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -5.8349994339726186,
+            "ep_lenght_mean": 967.0
+        }
+    },
+    "9": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -5.313845673432717,
+            "ep_lenght_mean": 862.7692307692307
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -5.789582781493664,
+            "ep_lenght_mean": 957.9166666666666
+        }
+    },
+    "11": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -4.837499582767487,
+            "ep_lenght_mean": 767.5
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -4.8190904747356065,
+            "ep_lenght_mean": 763.8181818181819
+        }
+    },
+    "13": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -4.339999606976142,
+            "ep_lenght_mean": 668.0
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -3.4965786604504836,
+            "ep_lenght_mean": 499.3157894736842
+        }
+    },
+    "15": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -3.964999683201313,
+            "ep_lenght_mean": 593.0
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -3.3492102921009064,
+            "ep_lenght_mean": 471.8888888888889
+        }
+    },
+    "17": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -3.369999718406926,
+            "ep_lenght_mean": 474.0
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -3.263809233903885,
+            "ep_lenght_mean": 462.23809523809524
+        }
+    },
+    "19": {
+        "15": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "30": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "45": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "60": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "75": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "90": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "105": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "120": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "135": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "150": {
+            "tested": false,
+            "cum_reward_mean": -1000,
+            "ep_lenght_mean": 0
+        },
+        "165": {
+            "tested": true,
+            "cum_reward_mean": -3.4194997176527977,
+            "ep_lenght_mean": 483.9
+        },
+        "180": {
+            "tested": true,
+            "cum_reward_mean": -3.0711997616291047,
+            "ep_lenght_mean": 422.2
+        }
+    }
+}
