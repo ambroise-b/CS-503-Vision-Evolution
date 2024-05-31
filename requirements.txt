@@ -1,0 +1,9 @@
+numpy==1.21.2
+mlagents==1.0.0
+mlagents-envs==1.0.0
+PyYAML==6.0.1
+tensorboard==2.16.2
+tensorboard-data-server==0.7.2
+
+
+
