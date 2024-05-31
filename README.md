@@ -5,16 +5,18 @@
 ## Installation
 
 1. Install Unity Hub
-2. clone the project `git clone git@github.com:ambor1011/CS-503-project.git`
-3. Open the project in Unity Hub, this will install the dependencies
-4. install requirements `pip install -r requirements.txt`
+2. Download the Unity editor version:2022.3.25f1
+3. clone the project `git clone git@github.com:ambor1011/CS-503-project.git`
+4. Open the project in Unity Hub, this will install the dependencies
+5. install requirements `pip install -r requirements.txt`
 
 ## Running the project
 
-1. In unity you need to build the project
+1. In unity you need to build the project, with the development build option
 2. place the built project in the `Scripts` folder
 3. copy `ant_config.yaml` file from the `Assets/config` folder to the `Scripts/` folder
-4. run `python vision_evovle.py` to launch an experiment
+4. change the name of the executable in `vision_evolve.py` to match the name of the built project.
+5. run `python vision_evovle.py` to launch an experiment.
 
 ## Structure
 
