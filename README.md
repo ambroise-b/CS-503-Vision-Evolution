@@ -7,8 +7,9 @@
 1. Install Unity Hub
 2. Download the Unity editor version:2022.3.25f1
 3. clone the project `git clone git@github.com:ambor1011/CS-503-project.git`
-4. Open the project in Unity Hub, this will install the dependencies
-5. install requirements `pip install -r requirements.txt`
+4. cd into the cloned git repository and run `git lfs pull` to pull the large files
+5. Open the project in Unity Hub, this will install the dependencies
+6. install requirements `pip install -r requirements.txt`
 
 ## Running the project
 
